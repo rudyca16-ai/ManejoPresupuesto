@@ -8,7 +8,7 @@ trigger:
 
 pool:
   name: Selfhosted
-  vmImage: 'windows-latest'
+  # vmImage: 'windows-latest'
 
 variables:
   solution: '**/*.sln'
