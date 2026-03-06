@@ -1,17 +1,11 @@
-# ASP.NET Core (.NET Framework)
-# Build and test ASP.NET Core projects targeting the full .NET Framework.
-# Add steps that publish symbols, save build artifacts, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
-
 trigger:
 - main
 
 pool:
   name: Selfhosted
-  # vmImage: 'windows-latest'
 
 variables:
-  solution: '**/*.sln'
+  solution: 'ManejoPresupuesto/ManejoPresupuesto.sln'
   proyectoMVC: 'ManejoPresupuesto/ManejoPresupuesto.csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
@@ -23,21 +17,25 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
+# Compila toda la solución (incluye el proyecto DB)
 - task: VSBuild@1
-  displayName: 'Compilar solucion'
+  displayName: 'Compilar solución (incluye DB)'
   inputs:
-    solution: '**/*.sln'
-    configuration:  '$(buildConfiguration)'
+    solution: '$(solution)'
+    configuration: '$(buildConfiguration)'
     msbuildArgs: '/p:DSP=Microsoft.Data.Tools.Schema.Sql.SqlAzureV12DatabaseSchemaProvider'
 
+# Copia los dacpac generados por el proyecto DB
 - task: CopyFiles@2
+  displayName: 'Copiar artefacto DB (.dacpac)'
   inputs:
     Contents: '**/*.dacpac'
     flattenFolders: true
     TargetFolder: '$(Build.ArtifactStagingDirectory)/db'
 
+# Publica el proyecto MVC
 - task: DotNetCoreCLI@2
-  displayName: 'Construyendo los artefactos...'
+  displayName: 'Publicando proyecto MVC'
   inputs:
     command: 'publish'
     publishWebProjects: false
@@ -46,5 +44,10 @@ steps:
     zipAfterPublish: false
     modifyOutputPath: false
 
+# Publica ambos artefactos
 - task: PublishBuildArtifacts@1
-  displayName: 'Publicando los artefactos'
+  displayName: 'Publicando artefactos'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
