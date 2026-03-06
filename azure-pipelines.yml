@@ -5,8 +5,8 @@ pool:
   name: Selfhosted
 
 variables:
-  solution: 'ManejoPresupuesto/ManejoPresupuesto.sln'
-  proyectoMVC: 'ManejoPresupuesto/ManejoPresupuesto.csproj'
+  solution: 'ManejoPresupuesto.sln'
+  proyectoMVC: 'ManejoPresupuesto.csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
