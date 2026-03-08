@@ -75,6 +75,5 @@
     <Build Include="dbo\Stored Procedures\Transacciones_Actualizar.sql" />
     <Build Include="dbo\Stored Procedures\Transacciones_Borrar.sql" />
     <Build Include="dbo\Stored Procedures\CrearDatosUsuarioNuevo.sql" />
-    <Build Include="dbo\Stored Procedures\Procedure_Prueba.sql" />
   </ItemGroup>
 </Project>
